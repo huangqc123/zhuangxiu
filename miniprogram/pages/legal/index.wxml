@@ -1,0 +1,45 @@
+<view class="legal-page page-container">
+  <view class="legal-cover">
+    <view class="legal-grid"></view>
+    <text class="legal-kicker">装修材料计算器</text>
+    <text class="legal-title">使用规则与隐私说明</text>
+    <text class="legal-desc">把服务边界、复核责任和本地数据处理方式说明清楚。</text>
+    <text class="legal-date">{{updatedAt}}</text>
+  </view>
+
+  <view class="legal-tabs">
+    <view class="legal-tab {{active === 'terms' ? 'active' : ''}}" data-mode="terms" aria-role="tab" bindtap="onSwitch">用户协议</view>
+    <view class="legal-tab {{active === 'privacy' ? 'active' : ''}}" data-mode="privacy" aria-role="tab" bindtap="onSwitch">隐私政策</view>
+  </view>
+
+  <view wx:if="{{active === 'terms'}}">
+    <view class="important-note">
+      <text>重要提示</text>
+      <text>本工具只提供材料采购概算。采购、施工及涉及安全的决定，必须结合现场、产品资料和专业人员意见复核。</text>
+    </view>
+    <view class="legal-content">
+      <view wx:for="{{termsSections}}" wx:key="title" class="legal-section">
+        <text class="legal-section-title">{{item.title}}</text>
+        <text class="legal-section-content">{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else>
+    <view class="privacy-summary">
+      <text>仅说明与材料计算、记录和分享功能直接相关的数据处理方式。</text>
+    </view>
+    <view class="legal-content">
+      <view wx:for="{{privacySections}}" wx:key="title" class="legal-section">
+        <text class="legal-section-title">{{item.title}}</text>
+        <text class="legal-section-content">{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{fromConsent}}" class="consent-action">
+    <button class="consent-button" bindtap="onAcceptAgreement">已阅读并同意</button>
+  </view>
+
+  <view class="legal-end">如适用法律另有强制性规定，以法律规定为准。</view>
+</view>

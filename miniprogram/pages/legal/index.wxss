@@ -1,0 +1,27 @@
+.legal-page { padding-top: 20rpx; }
+.legal-cover { position: relative; overflow: hidden; padding: 30rpx; color: #FFF8EF; background: #2D2D29; box-shadow: 7rpx 8rpx 0 #D8CFC1; }
+.legal-grid { position: absolute; inset: 0; opacity: .06; background-image: linear-gradient(rgba(255,255,255,.8) 1rpx, transparent 1rpx), linear-gradient(90deg, rgba(255,255,255,.8) 1rpx, transparent 1rpx); background-size: 40rpx 40rpx; }
+.legal-cover text { position: relative; z-index: 2; display: block; }
+.legal-kicker { color: #E7865B; font-size: 23rpx; font-weight: 700; }
+.legal-title { margin-top: 10rpx; font-size: 42rpx; line-height: 54rpx; font-weight: 840; }
+.legal-desc { margin-top: 13rpx; color: rgba(255,255,255,.74); font-size: 24rpx; line-height: 38rpx; }
+.legal-date { margin-top: 24rpx; color: rgba(255,255,255,.58); font-size: 21rpx; }
+.legal-tabs { display: grid; grid-template-columns: 1fr 1fr; margin-top: 28rpx; border: 1rpx solid #CFC5B7; background: #FFFDF8; }
+.legal-tab { display: flex; align-items: center; justify-content: center; min-height: 88rpx; color: #665F55; font-size: 27rpx; font-weight: 720; }
+.legal-tab + .legal-tab { border-left: 1rpx solid #CFC5B7; }
+.legal-tab.active { color: #FFFFFF; background: #A85037; }
+.important-note, .privacy-summary { margin-top: 20rpx; padding: 23rpx; border-left: 6rpx solid #B7772D; color: #6B4E31; background: #F3E5CA; }
+.important-note text { display: block; }
+.important-note text:first-child { font-size: 27rpx; font-weight: 780; }
+.important-note text:last-child { margin-top: 7rpx; font-size: 23rpx; line-height: 37rpx; }
+.privacy-summary { border-left-color: #176B5B; color: #315A51; background: #E2EDE8; font-size: 23rpx; line-height: 37rpx; }
+.legal-content { margin-top: 20rpx; border: 1rpx solid #D4CABD; background: #FFFDF8; box-shadow: 5rpx 6rpx 0 #DED6CA; }
+.legal-section { padding: 25rpx 23rpx; }
+.legal-section + .legal-section { border-top: 1rpx dashed #D7CDBF; }
+.legal-section text { display: block; }
+.legal-section-title { color: #393631; font-size: 28rpx; font-weight: 780; }
+.legal-section-content { margin-top: 9rpx; color: #665F55; font-size: 23rpx; line-height: 38rpx; text-align: justify; }
+.consent-action { margin-top: 26rpx; }
+.consent-button { width: 100%; min-height: 92rpx; border-radius: 0; color: #FFFFFF; background: #A85037; font-size: 28rpx; font-weight: 760; line-height: 92rpx; }
+.consent-button::after { display: none; }
+.legal-end { padding: 30rpx 12rpx 10rpx; color: #756D62; font-size: 21rpx; line-height: 34rpx; text-align: center; }

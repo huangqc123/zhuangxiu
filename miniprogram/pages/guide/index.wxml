@@ -1,0 +1,73 @@
+<view class="guide-page page-container">
+  <view class="manual-cover">
+    <view class="manual-grid"></view>
+    <view class="manual-top"><text>装修材料测量手册</text></view>
+    <text class="manual-kicker">材料测量与采购</text>
+    <text class="manual-title">用量指南</text>
+    <text class="manual-desc">把净工程量、施工损耗与整包装采购分开记录，让每个结果都有可复核的来路。</text>
+    <view class="manual-flow">
+      <view><text>01</text><text>测量净量</text></view>
+      <view class="flow-line"></view>
+      <view><text>02</text><text>加入损耗</text></view>
+      <view class="flow-line"></view>
+      <view><text>03</text><text>包装取整</text></view>
+    </view>
+  </view>
+
+  <view class="chapter-heading">
+    <view><text class="chapter-no">01</text><text class="chapter-title">正确使用方式</text></view>
+    <text class="chapter-en">使用方法</text>
+  </view>
+  <view class="principle-list">
+    <view wx:for="{{principles}}" wx:key="no" class="principle-row">
+      <text class="principle-no">{{item.no}}</text>
+      <view><text class="principle-title">{{item.title}}</text><text class="principle-desc">{{item.desc}}</text></view>
+    </view>
+  </view>
+
+  <view class="chapter-heading">
+    <view><text class="chapter-no">02</text><text class="chapter-title">常见损耗参考</text></view>
+    <text class="chapter-en">参考范围</text>
+  </view>
+  <view class="waste-table">
+    <view class="table-row table-head"><text>材料 / 工艺</text><text>建议起点</text><text>现场说明</text></view>
+    <view wx:for="{{wasteRows}}" wx:key="material" class="table-row">
+      <text class="table-material">{{item.material}}</text><text class="table-range">{{item.range}}</text><text class="table-note">{{item.note}}</text>
+    </view>
+  </view>
+  <view class="margin-note"><text>提示</text><text>以上为常见场景的经验起点，并非统一消耗定额。异形、斜铺、拼花、跨房间通铺和高损耗材料应按排版样板调整。</text></view>
+
+  <view class="chapter-heading">
+    <view><text class="chapter-no">03</text><text class="chapter-title">统一计算口径</text></view>
+    <text class="chapter-en">计算公式</text>
+  </view>
+  <view class="formula-sheet">
+    <view class="formula-top"><text>名称</text><text>计算关系</text></view>
+    <view class="formula-item"><text class="formula-name">净工程量</text><text class="formula-text">毛工程量 − 明确扣除量</text></view>
+    <view class="formula-item"><text class="formula-name">含损耗需求</text><text class="formula-text">净工程量 × (1 + 损耗率)</text></view>
+    <view class="formula-item"><text class="formula-name">整包装采购</text><text class="formula-text">含损耗需求 ÷ 单包装含量，再向上取整</text></view>
+    <view class="formula-item"><text class="formula-name">涂刷材料</text><text class="formula-text">面积 × 遍数 ÷ 单遍覆盖率</text></view>
+  </view>
+
+  <view class="chapter-heading">
+    <view><text class="chapter-no">04</text><text class="chapter-title">规范与资料</text></view>
+    <text class="chapter-en">参考资料</text>
+  </view>
+  <view class="reference-list">
+    <view wx:for="{{references}}" wx:key="code" class="reference-row">
+      <text class="reference-code">{{item.code}}</text>
+      <view><text class="reference-name">{{item.name}}</text><text class="reference-scope">{{item.scope}}</text></view>
+    </view>
+  </view>
+  <text class="reference-updated">{{updatedAt}} · 规范仅用于提示专业边界，不作为本工具默认用量的来源。</text>
+
+  <view class="boundary-note">
+    <text class="boundary-label">专业边界</text>
+    <text class="boundary-text">本小程序用于装修材料采购概算，不进行结构安全、防火等级、防水构造、吊顶锚固和材料性能合规判定。涉及安全与强制性标准时，须由设计、施工及相关专业人员确认。</text>
+  </view>
+
+  <view class="privacy-note">
+    <text>仅存本机 · 隐私说明</text>
+    <text>项目为纯前端实现，不要求登录，不上传房间尺寸、材料参数或计算记录。清除微信小程序数据后，本地记录也会被删除。</text>
+  </view>
+</view>

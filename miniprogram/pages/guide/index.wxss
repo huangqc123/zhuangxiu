@@ -1,0 +1,95 @@
+.manual-cover { position: relative; overflow: hidden; padding: 28rpx 30rpx 30rpx; color: #FFF8EF; background: #A85037; box-shadow: 8rpx 9rpx 0 #D8CFC1; }
+.manual-grid { position: absolute; inset: 0; opacity: .07; background-image: linear-gradient(rgba(255,255,255,.8) 1rpx, transparent 1rpx), linear-gradient(90deg, rgba(255,255,255,.8) 1rpx, transparent 1rpx); background-size: 40rpx 40rpx; }
+.manual-top { position: relative; z-index: 2; display: flex; justify-content: space-between; padding-bottom: 14rpx; border-bottom: 1rpx solid rgba(255,255,255,.28); color: rgba(255,255,255,.63); font-family: monospace; font-size: 15rpx; letter-spacing: 2rpx; }
+.manual-kicker, .manual-title, .manual-desc { position: relative; z-index: 2; display: block; }
+.manual-kicker { margin-top: 31rpx; color: rgba(255,255,255,.68); font-size: 20rpx; font-weight: 700; }
+.manual-title { margin-top: 5rpx; font-size: 50rpx; font-weight: 850; letter-spacing: 2rpx; }
+.manual-desc { width: 570rpx; margin-top: 14rpx; color: rgba(255,255,255,.76); font-size: 20rpx; line-height: 32rpx; }
+.manual-flow { position: relative; z-index: 2; display: grid; grid-template-columns: auto 1fr auto 1fr auto; align-items: center; margin-top: 30rpx; padding: 17rpx 18rpx; border: 1rpx solid rgba(255,255,255,.25); background: rgba(91,36,24,.13); }
+.manual-flow view { display: flex; flex-direction: column; align-items: center; }
+.manual-flow view text:first-child { color: rgba(255,255,255,.53); font-family: monospace; font-size: 14rpx; }
+.manual-flow view text:last-child { margin-top: 4rpx; font-size: 18rpx; font-weight: 700; }
+.flow-line { height: 1rpx; margin: 0 12rpx; background: rgba(255,255,255,.3); }
+
+.chapter-heading { display: flex; align-items: flex-end; justify-content: space-between; margin: 48rpx 2rpx 18rpx; padding-bottom: 13rpx; border-bottom: 2rpx solid #35342F; }
+.chapter-heading > view { display: flex; align-items: baseline; }
+.chapter-no { color: #B95D40; font-family: monospace; font-size: 18rpx; font-weight: 850; }
+.chapter-title { margin-left: 13rpx; font-size: 29rpx; font-weight: 820; }
+.chapter-en { color: #9B9286; font-family: monospace; font-size: 14rpx; letter-spacing: 2rpx; }
+.principle-list { border-top: 1rpx solid #C7BDAF; background: #FFFDF8; box-shadow: 6rpx 7rpx 0 #DDD5C8; }
+.principle-row { display: grid; grid-template-columns: 58rpx 1fr; padding: 22rpx 22rpx 22rpx 0; border-right: 1rpx solid #CEC4B6; border-bottom: 1rpx solid #CEC4B6; border-left: 1rpx solid #CEC4B6; }
+.principle-no { display: flex; align-items: flex-start; justify-content: center; color: #B95D40; font-family: monospace; font-size: 18rpx; font-weight: 800; }
+.principle-title, .principle-desc { display: block; }
+.principle-title { font-size: 23rpx; font-weight: 740; }
+.principle-desc { margin-top: 6rpx; color: #756D62; font-size: 19rpx; line-height: 31rpx; }
+
+.waste-table { border-top: 2rpx solid #393833; border-left: 1rpx solid #C9BFB1; background: #FFFDF8; }
+.table-row { display: grid; grid-template-columns: 1.08fr .72fr 1.4fr; align-items: center; min-height: 86rpx; border-right: 1rpx solid #C9BFB1; border-bottom: 1rpx solid #C9BFB1; }
+.table-row text { padding: 11rpx 14rpx; }
+.table-row text + text { border-left: 1rpx solid #DED5C8; }
+.table-head { min-height: 62rpx; color: #756C60; background: #EAE1D4; font-size: 17rpx; font-weight: 720; }
+.table-material { font-size: 19rpx; font-weight: 680; }
+.table-range { color: #A85037; font-family: monospace; font-size: 19rpx; font-weight: 800; }
+.table-note { color: #837A6D; font-size: 17rpx; line-height: 26rpx; }
+.margin-note { display: grid; grid-template-columns: 70rpx 1fr; margin-top: 16rpx; padding: 17rpx 18rpx; border-left: 5rpx solid #B95D40; color: #82786B; background: #EDE5D9; font-size: 17rpx; line-height: 28rpx; }
+.margin-note text:first-child { color: #B95D40; font-family: monospace; font-size: 15rpx; font-weight: 800; letter-spacing: 1rpx; }
+
+.formula-sheet { border: 1rpx solid #C7BDAF; background: #FFFDF8; box-shadow: 6rpx 7rpx 0 #DDD5C8; }
+.formula-top, .formula-item { display: grid; grid-template-columns: 175rpx 1fr; }
+.formula-top { color: #777064; background: #E9E0D3; font-size: 16rpx; font-weight: 700; }
+.formula-top text, .formula-item text { padding: 15rpx 18rpx; }
+.formula-top text + text, .formula-item text + text { border-left: 1rpx solid #D6CCBD; }
+.formula-item { border-top: 1rpx solid #D6CCBD; }
+.formula-name { color: #4D4942; font-size: 19rpx; font-weight: 700; }
+.formula-text { color: #776F63; font-family: monospace; font-size: 17rpx; line-height: 28rpx; }
+
+.reference-list { border-top: 1rpx solid #C7BDAF; background: #FFFDF8; }
+.reference-row { display: grid; grid-template-columns: 240rpx 1fr; align-items: center; min-height: 104rpx; border-right: 1rpx solid #CDC3B5; border-bottom: 1rpx solid #CDC3B5; border-left: 1rpx solid #CDC3B5; }
+.reference-code { padding-left: 20rpx; color: #A85037; font-family: monospace; font-size: 18rpx; font-weight: 800; }
+.reference-row > view { padding: 14rpx 18rpx; border-left: 1rpx solid #DDD3C5; }
+.reference-name, .reference-scope { display: block; }
+.reference-name { font-size: 19rpx; font-weight: 700; }
+.reference-scope { margin-top: 4rpx; color: #91887C; font-size: 16rpx; }
+
+.boundary-note { margin-top: 34rpx; padding: 24rpx; border-top: 5rpx solid #B7772D; background: #F3E5CA; }
+.boundary-label, .boundary-text { display: block; }
+.boundary-label { color: #86521E; font-size: 22rpx; font-weight: 760; }
+.boundary-text { margin-top: 9rpx; color: #785E42; font-size: 18rpx; line-height: 30rpx; }
+.privacy-note { margin-top: 20rpx; padding: 25rpx 20rpx; border: 1rpx dashed #BFB5A6; text-align: center; }
+.privacy-note text { display: block; }
+.privacy-note text:first-child { color: #625B51; font-family: monospace; font-size: 15rpx; letter-spacing: 1rpx; }
+.privacy-note text:nth-child(2) { margin-top: 10rpx; color: #81786C; font-size: 17rpx; line-height: 28rpx; }
+
+/* 易读版字号与窄屏表格 */
+.manual-top { font-family: inherit; font-size: 22rpx; letter-spacing: 0; }
+.manual-kicker { font-size: 26rpx; }
+.manual-desc { font-size: 25rpx; line-height: 39rpx; }
+.manual-flow view text:first-child { font-size: 20rpx; }
+.manual-flow view text:last-child { font-size: 24rpx; }
+.chapter-no { font-size: 22rpx; }
+.chapter-title { font-size: 34rpx; }
+.chapter-en { font-family: inherit; font-size: 21rpx; letter-spacing: 0; }
+.principle-no { font-size: 22rpx; }
+.principle-title { font-size: 28rpx; }
+.principle-desc { font-size: 24rpx; line-height: 38rpx; }
+.table-head { display: none; }
+.table-row { grid-template-columns: 1fr auto; padding: 17rpx 19rpx; }
+.table-row text { padding: 7rpx 4rpx; }
+.table-row text + text { border-left: 0; }
+.table-material { font-size: 26rpx; }
+.table-range { font-size: 25rpx; }
+.table-note { grid-column: 1 / -1; margin-top: 7rpx; padding-top: 12rpx !important; border-top: 1rpx dashed #D8CFC2; font-size: 23rpx; line-height: 35rpx; }
+.margin-note { grid-template-columns: 78rpx 1fr; font-size: 23rpx; line-height: 35rpx; }
+.margin-note text:first-child { font-family: inherit; font-size: 23rpx; letter-spacing: 0; }
+.formula-top { font-size: 21rpx; }
+.formula-name { font-size: 24rpx; }
+.formula-text { font-family: inherit; font-size: 22rpx; line-height: 34rpx; }
+.reference-code { padding-left: 16rpx; font-size: 21rpx; }
+.reference-name { font-size: 24rpx; }
+.reference-scope { font-size: 21rpx; }
+.boundary-label { font-size: 27rpx; }
+.boundary-text { font-size: 23rpx; line-height: 36rpx; }
+.privacy-note text:first-child { font-family: inherit; font-size: 22rpx; letter-spacing: 0; }
+.privacy-note text:nth-child(2) { font-size: 22rpx; line-height: 35rpx; }
+.principle-desc, .table-note, .margin-note, .formula-text, .reference-scope, .privacy-note text:nth-child(2) { color: #665F55; }
+.reference-updated { display: block; margin-top: 14rpx; color: #665F55; font-size: 22rpx; line-height: 35rpx; }

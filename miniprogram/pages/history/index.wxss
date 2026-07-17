@@ -1,0 +1,64 @@
+.ledger-cover { position: relative; overflow: hidden; padding: 27rpx 28rpx 25rpx; color: #F9F2E8; background: #2D2D29; box-shadow: 8rpx 9rpx 0 #D6CDBF; }
+.ledger-grid { position: absolute; inset: 0; opacity: .06; background-image: linear-gradient(rgba(255,255,255,.8) 1rpx, transparent 1rpx), linear-gradient(90deg, rgba(255,255,255,.8) 1rpx, transparent 1rpx); background-size: 38rpx 38rpx; }
+.ledger-topline { position: relative; z-index: 2; display: flex; justify-content: space-between; padding-bottom: 14rpx; border-bottom: 1rpx solid rgba(255,255,255,.2); color: rgba(255,255,255,.48); font-family: monospace; font-size: 15rpx; letter-spacing: 2rpx; }
+.ledger-main { position: relative; z-index: 2; display: flex; align-items: flex-end; justify-content: space-between; padding: 36rpx 0 32rpx; }
+.ledger-kicker, .ledger-title, .ledger-desc, .ledger-count text { display: block; }
+.ledger-kicker { color: #E78158; font-size: 19rpx; font-weight: 700; }
+.ledger-title { margin-top: 7rpx; font-size: 46rpx; font-weight: 850; letter-spacing: 2rpx; }
+.ledger-desc { margin-top: 8rpx; color: rgba(255,255,255,.55); font-size: 18rpx; }
+.ledger-count { flex: 0 0 auto; margin-left: 18rpx; text-align: right; }
+.ledger-count text:first-child { font-family: monospace; font-size: 62rpx; line-height: 62rpx; font-weight: 850; }
+.ledger-count text:last-child { margin-top: 6rpx; color: rgba(255,255,255,.45); font-size: 14rpx; letter-spacing: 2rpx; }
+.ledger-privacy { position: relative; z-index: 2; display: flex; align-items: center; padding-top: 14rpx; border-top: 1rpx solid rgba(255,255,255,.2); color: rgba(255,255,255,.55); font-size: 17rpx; }
+.privacy-dot { width: 7rpx; height: 7rpx; margin-right: 10rpx; background: #E78158; }
+
+.register-heading { display: flex; align-items: flex-end; justify-content: space-between; margin: 46rpx 2rpx 18rpx; padding-bottom: 14rpx; border-bottom: 2rpx solid #34332E; }
+.register-heading > view { display: flex; align-items: baseline; }
+.register-no { color: #B95D40; font-family: monospace; font-size: 18rpx; font-weight: 800; }
+.register-title { margin-left: 13rpx; font-size: 30rpx; font-weight: 820; }
+.clear-action { color: #A85037; font-size: 19rpx; text-decoration: underline; }
+.record-register { border-top: 1rpx solid #BFB6A8; background: #FFFDF8; box-shadow: 6rpx 7rpx 0 #DDD5C8; }
+.record-row { display: grid; grid-template-columns: 52rpx 1fr; border-right: 1rpx solid #CFC5B6; border-bottom: 1rpx solid #CFC5B6; border-left: 1rpx solid #CFC5B6; }
+.record-index { display: flex; align-items: center; justify-content: center; grid-row: 1 / 3; border-right: 1rpx solid #CFC5B6; color: #AAA092; font-family: monospace; font-size: 17rpx; }
+.record-main { display: flex; align-items: center; min-height: 99rpx; padding: 13rpx 18rpx; }
+.record-icon { display: flex; align-items: center; justify-content: center; flex: 0 0 52rpx; width: 52rpx; height: 52rpx; border: 2rpx solid; font-size: 21rpx; font-weight: 800; }
+.record-copy { min-width: 0; flex: 1; margin-left: 14rpx; }
+.record-name, .record-time { display: block; }
+.record-name { font-size: 23rpx; font-weight: 730; }
+.record-time { margin-top: 4rpx; color: #999083; font-family: monospace; font-size: 15rpx; }
+.record-result { margin-left: 10rpx; color: #34332F; white-space: nowrap; }
+.record-value { font-family: monospace; font-size: 30rpx; font-weight: 820; }
+.record-unit { margin-left: 4rpx; color: #81786B; font-size: 16rpx; }
+.record-actions { display: flex; justify-content: flex-end; gap: 28rpx; min-height: 48rpx; padding: 11rpx 18rpx; border-top: 1rpx dashed #D8CFC1; color: #746B5E; font-size: 17rpx; }
+.record-actions text:first-child { color: #A85037; }
+.empty-ledger { padding: 74rpx 22rpx 40rpx; text-align: center; }
+.empty-paper { width: 340rpx; margin: 0 auto 34rpx; padding: 18rpx; border: 1rpx solid #BEB4A5; background: #FFFCF7; box-shadow: 8rpx 9rpx 0 #DDD4C6; transform: rotate(-2deg); }
+.empty-paper-head { display: grid; grid-template-columns: 50rpx 1fr 1fr; padding-bottom: 10rpx; border-bottom: 2rpx solid #373631; color: #A09789; font-family: monospace; font-size: 13rpx; }
+.empty-line { height: 30rpx; border-bottom: 1rpx solid #D8CFC1; }
+.empty-line.short { width: 70%; }
+.empty-title, .empty-desc { display: block; }
+.empty-title { font-size: 29rpx; font-weight: 780; }
+.empty-desc { margin: 12rpx auto 0; color: #8E8579; font-size: 20rpx; line-height: 31rpx; }
+.empty-button { width: 360rpx; margin: 34rpx auto 0; }
+
+/* 易读版字号 */
+.ledger-topline { font-family: inherit; font-size: 22rpx; letter-spacing: 0; }
+.ledger-kicker { font-size: 25rpx; }
+.ledger-desc { font-size: 23rpx; }
+.ledger-count text:last-child { font-size: 21rpx; letter-spacing: 0; }
+.ledger-privacy { font-size: 22rpx; }
+.register-no { font-size: 22rpx; }
+.register-title { font-size: 34rpx; }
+.clear-action { font-size: 24rpx; }
+.record-index { font-size: 21rpx; }
+.record-icon { width: 58rpx; height: 58rpx; flex-basis: 58rpx; font-size: 25rpx; }
+.record-name { font-size: 28rpx; }
+.record-time { font-size: 21rpx; }
+.record-unit { font-size: 21rpx; }
+.record-actions { min-height: 58rpx; font-size: 23rpx; }
+.empty-title { font-size: 33rpx; }
+.empty-desc { font-size: 24rpx; line-height: 37rpx; }
+
+.record-time, .record-actions, .empty-desc { color: #665F55; }
+.clear-action { display: inline-flex; align-items: center; min-height: 72rpx; padding-left: 24rpx; }
+.record-actions text { display: inline-flex; align-items: center; min-height: 68rpx; padding: 0 8rpx; }

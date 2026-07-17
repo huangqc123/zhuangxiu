@@ -1,0 +1,50 @@
+<view class="history-page page-container">
+  <view class="ledger-cover">
+    <view class="ledger-grid"></view>
+    <view class="ledger-topline"><text>材料测算台账</text><text>仅存本机</text></view>
+    <view class="ledger-main">
+      <view>
+        <text class="ledger-kicker">材料测算台账</text>
+        <text class="ledger-title">计算记录</text>
+        <text class="ledger-desc">本机留存，可载入原参数继续核算</text>
+      </view>
+      <view class="ledger-count"><text>{{records.length}}</text><text>条记录</text></view>
+    </view>
+    <view class="ledger-privacy"><text class="privacy-dot"></text><text>所有记录仅保存在当前设备</text></view>
+  </view>
+
+  <view wx:if="{{records.length}}">
+    <view class="register-heading">
+      <view><text class="register-no">01</text><text class="register-title">最近计算</text></view>
+      <text class="clear-action" aria-role="button" bindtap="onClearAll">清空台账</text>
+    </view>
+
+    <view class="record-register">
+      <view wx:for="{{records}}" wx:key="id" class="record-row">
+        <view class="record-index">{{index + 1}}</view>
+        <view class="record-main" data-id="{{item.id}}" data-type="{{item.toolId}}" aria-role="button" aria-label="载入{{item.toolName}}参数" bindtap="onReuse">
+          <view class="record-icon" style="color: {{item.accent}}; border-color: {{item.accent}};">{{item.icon}}</view>
+          <view class="record-copy">
+            <text class="record-name">{{item.displayName}}</text>
+            <text class="record-time">{{item.subtitleText}}</text>
+          </view>
+          <view class="record-result"><text class="record-value">{{item.primary.value}}</text><text class="record-unit">{{item.primary.unit}}</text></view>
+        </view>
+        <view class="record-actions">
+          <text data-id="{{item.id}}" data-type="{{item.toolId}}" aria-role="button" aria-label="载入{{item.displayName}}参数" bindtap="onReuse">载入参数</text>
+          <text data-id="{{item.id}}" aria-role="button" aria-label="删除{{item.displayName}}记录" bindtap="onDelete">删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else class="empty-ledger">
+    <view class="empty-paper">
+      <view class="empty-paper-head"><text>编号</text><text>日期</text><text>结果</text></view>
+      <view class="empty-line"></view><view class="empty-line"></view><view class="empty-line short"></view>
+    </view>
+    <text class="empty-title">台账还是空的</text>
+    <text class="empty-desc">完成材料计算后，参数与结果摘要会自动记录在这里。</text>
+    <view class="primary-button empty-button" bindtap="onGoHome">选择计算工具</view>
+  </view>
+</view>

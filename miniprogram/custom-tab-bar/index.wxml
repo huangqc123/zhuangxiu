@@ -1,0 +1,25 @@
+<view class="tabbar-shell">
+  <view
+    wx:for="{{tabs}}"
+    wx:key="pagePath"
+    class="tabbar-item {{selected === index ? 'active' : ''}}"
+    data-index="{{index}}"
+    data-path="{{item.pagePath}}"
+    aria-role="tab"
+    aria-label="{{item.text}}"
+    bindtap="onSwitchTab"
+  >
+    <view class="tabbar-icon {{item.type}}-icon">
+      <block wx:if="{{item.type === 'home'}}">
+        <view class="home-roof"></view>
+        <view class="home-body"><view class="home-door"></view></view>
+      </block>
+      <block wx:else>
+        <view class="profile-head"></view>
+        <view class="profile-body"></view>
+      </block>
+    </view>
+    <text>{{item.text}}</text>
+    <view class="active-mark"></view>
+  </view>
+</view>

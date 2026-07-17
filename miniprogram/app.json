@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/profile/index",
+    "pages/calculator/index",
+    "pages/history/index",
+    "pages/guide/index",
+    "pages/legal/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "装修材料计算器",
+    "navigationBarBackgroundColor": "#2D2D29",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F4F0E8",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#81786C",
+    "selectedColor": "#A85037",
+    "backgroundColor": "#FFFDF8",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

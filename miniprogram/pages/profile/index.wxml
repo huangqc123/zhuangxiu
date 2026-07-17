@@ -1,0 +1,86 @@
+<view class="profile-page page-container">
+  <view class="profile-cover">
+    <view class="profile-grid"></view>
+    <view class="profile-heading">
+      <view class="profile-seal">我</view>
+      <view>
+        <text class="profile-title">我的</text>
+        <text class="profile-desc">常用工具与本机计算记录</text>
+      </view>
+    </view>
+    <view class="profile-stats">
+      <view><text>{{favoriteCount}}</text><text>常用工具</text></view>
+      <view><text>{{historyCount}}</text><text>计算记录</text></view>
+    </view>
+  </view>
+
+  <view class="profile-section-title">快捷入口</view>
+  <view class="profile-menu">
+    <view class="menu-row" aria-role="button" bindtap="onOpenHistory">
+      <view class="menu-icon history-icon"><view></view><view></view><view></view></view>
+      <view class="menu-copy"><text>计算记录</text><text>查看并重新载入以前的计算参数</text></view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row" aria-role="button" bindtap="onOpenGuide">
+      <view class="menu-icon guide-icon"><text>帮</text></view>
+      <view class="menu-copy"><text>使用帮助</text><text>查看测量方法、计算口径和专业边界</text></view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row share-row">
+      <view class="menu-icon share-icon"><text>享</text></view>
+      <view class="menu-copy"><text>分享好友</text><text>把装修算料工具推荐给微信好友</text></view>
+      <text class="menu-arrow">›</text>
+      <button class="share-trigger" open-type="share" aria-label="分享给微信好友"></button>
+    </view>
+    <view class="menu-row" aria-role="button" bindtap="onOpenFeedback">
+      <view class="menu-icon feedback-icon"><text>意</text></view>
+      <view class="menu-copy"><text>意见反馈</text><text>反馈问题、计算口径或功能建议</text></view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <block wx:if="{{favoriteTools.length}}">
+    <view class="profile-section-heading">
+      <text class="profile-section-title">常用工具</text>
+      <text class="profile-section-count">{{favoriteCount}} 项</text>
+    </view>
+    <view class="favorite-list">
+      <view wx:for="{{favoriteTools}}" wx:key="id" class="favorite-row" data-id="{{item.id}}" aria-role="button" aria-label="打开{{item.name}}" bindtap="onToolTap">
+        <view class="favorite-icon" style="color: {{item.accent}}; background: {{item.softColor}};">{{item.icon}}</view>
+        <view class="favorite-copy"><text>{{item.name}}</text><text>{{item.subtitle}}</text></view>
+        <text class="favorite-remove" data-id="{{item.id}}" aria-role="button" aria-label="取消常用" catchtap="onToggleFavorite">★</text>
+      </view>
+    </view>
+  </block>
+
+  <block wx:if="{{recent.length}}">
+    <view class="profile-section-heading">
+      <text class="profile-section-title">最近计算</text>
+      <text class="profile-section-count" aria-role="button" bindtap="onOpenHistory">查看全部</text>
+    </view>
+    <view class="recent-list">
+      <view wx:for="{{recent}}" wx:key="id" class="recent-row" data-id="{{item.id}}" data-type="{{item.toolId}}" bindtap="onOpenRecord">
+        <view class="recent-color" style="background: {{item.accent}};"></view>
+        <view class="recent-copy"><text>{{item.displayName}}</text><text>{{item.subtitleText}}</text></view>
+        <view class="recent-value"><text>{{item.primary.value}}</text><text>{{item.primary.unit}}</text></view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{!favoriteTools.length && !recent.length}}" class="profile-empty">
+    <view class="empty-symbol">＋</view>
+    <text>还没有个人记录</text>
+    <text>在首页收藏常用工具，或完成一次材料计算后，这里会自动汇总。</text>
+  </view>
+
+  <view class="local-note">
+    <text class="local-note-title">本机数据说明</text>
+    <text>常用工具、房间参数和计算记录仅保存在当前设备，不需要注册登录，也不会上传。</text>
+  </view>
+
+  <view class="legal-footer">
+    <text data-mode="terms" aria-role="link" bindtap="onOpenLegal">用户协议</text>
+    <text class="legal-separator">·</text>
+    <text data-mode="privacy" aria-role="link" bindtap="onOpenLegal">隐私政策</text>
+  </view>
+</view>

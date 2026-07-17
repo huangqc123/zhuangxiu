@@ -1,0 +1,92 @@
+page {
+  min-height: 100%;
+  background: #F4F0E8;
+  color: #282A27;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+view,
+text,
+input,
+button {
+  box-sizing: border-box;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding: 28rpx 30rpx calc(48rpx + env(safe-area-inset-bottom));
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1rpx solid rgba(58, 54, 46, 0.1);
+  border-radius: 18rpx;
+  box-shadow: 0 10rpx 28rpx rgba(49, 43, 34, 0.06);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 34rpx 4rpx 20rpx;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-mark {
+  width: 7rpx;
+  height: 30rpx;
+  border-radius: 6rpx;
+  background: #C96338;
+}
+
+.section-title {
+  font-size: 32rpx;
+  line-height: 44rpx;
+  font-weight: 750;
+  color: #282A27;
+}
+
+.section-action {
+  color: #756F65;
+  font-size: 24rpx;
+}
+
+.primary-button,
+.secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92rpx;
+  border-radius: 14rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.primary-button {
+  color: #FFFFFF;
+  background: #2D2D29;
+  box-shadow: 0 12rpx 26rpx rgba(45, 45, 41, 0.18);
+}
+
+.primary-button:active {
+  transform: scale(0.99);
+  opacity: 0.92;
+}
+
+.secondary-button {
+  color: #8E4A2E;
+  background: #F3E2D8;
+}
+
+.muted {
+  color: #817B71;
+}
+
+.safe-bottom {
+  height: calc(24rpx + env(safe-area-inset-bottom));
+}

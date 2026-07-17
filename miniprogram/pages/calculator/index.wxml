@@ -1,0 +1,285 @@
+<view wx:if="{{tool}}" class="calculator-page page-container">
+  <view class="calc-cover">
+    <view class="cover-grid"></view>
+    <view class="calc-cover-head">
+      <view class="cover-code" style="background: {{tool.accent}};">{{tool.icon}}</view>
+      <view class="cover-copy">
+        <text class="cover-kicker">装修材料用量估算</text>
+        <text class="cover-title">{{tool.name}}</text>
+        <text class="cover-subtitle">{{tool.subtitle}}</text>
+      </view>
+      <view class="cover-favorite {{isFavorite ? 'active' : ''}}" aria-role="button" aria-label="{{isFavorite ? '取消常用' : '加入常用'}}" bindtap="onToggleFavorite">
+        <text>{{isFavorite ? '★' : '☆'}}</text>
+      </view>
+    </view>
+
+    <view class="drawing-board" aria-role="img" aria-label="{{tool.name}}施工示意图">
+      <view class="drawing-topline">
+        <text class="drawing-title">{{tool.visualTitle}}</text>
+        <text class="drawing-scale">示意图 · 不按比例</text>
+      </view>
+
+      <view class="drawing-area">
+        <view class="scene scene-{{tool.visualType}}" style="color: {{tool.accent}};">
+          <view class="scene-surface"></view>
+          <view class="scene-part part-a"></view>
+          <view class="scene-part part-b"></view>
+          <view class="scene-part part-c"></view>
+          <view class="scene-part part-d"></view>
+          <view class="scene-part part-e"></view>
+          <view class="scene-part part-f"></view>
+          <view class="scene-part part-g"></view>
+          <view class="scene-part part-h"></view>
+          <text class="scene-label">{{tool.visualLabel}}</text>
+        </view>
+
+        <view class="measure-strip">
+          <view class="measure-item">
+            <text class="measure-label">{{basicFields[0].label}}</text>
+            <text class="measure-value">{{params[basicFields[0].key]}} {{basicFields[0].unit}}</text>
+          </view>
+          <view wx:if="{{basicFields[1]}}" class="measure-item measure-item-right">
+            <text class="measure-label">{{basicFields[1].label}}</text>
+            <text class="measure-value">{{params[basicFields[1].key]}} {{basicFields[1].unit}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="drawing-caption">
+        <text class="caption-bullet" style="background: {{tool.accent}};"></text>
+        <text class="caption-copy">{{tool.scene}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{loadedFromHistory}}" class="history-banner">
+    <text class="history-banner-label">已载入记录</text>
+    <text>参数可继续修改并重新计算</text>
+  </view>
+
+  <view wx:elif="{{loadedFromShare}}" class="history-banner share-banner">
+    <text class="history-banner-label">好友分享结果</text>
+    <text>已还原分享参数和采购清单，不会自动写入本机记录</text>
+  </view>
+
+  <view wx:else class="example-banner">
+    <text class="example-banner-title">当前已填入示例参数</text>
+    <text>请逐项按现场尺寸和实际产品包装规格修改后再计算。</text>
+  </view>
+
+  <view wx:if="{{tool.preflight}}" class="preflight-note">
+    <text class="preflight-title">计算前请确认</text>
+    <text>{{tool.preflight}}</text>
+  </view>
+
+  <view class="sheet-heading">
+    <view>
+      <text class="sheet-index">01</text>
+      <text class="sheet-title">基础参数</text>
+    </view>
+    <text class="sheet-note">按现场净尺寸填写</text>
+  </view>
+
+  <view class="field-grid">
+    <view
+      wx:for="{{basicFields}}"
+      wx:key="key"
+      id="field-{{item.key}}"
+      class="field-cell {{errorField === item.key ? 'field-cell-error' : ''}}"
+    >
+      <view class="field-cell-head">
+        <text class="field-label">{{item.label}}</text>
+        <text class="field-order">{{index + 1}}</text>
+      </view>
+      <text wx:if="{{item.note}}" class="field-note">{{item.note}}</text>
+      <view class="field-entry">
+        <input
+          class="field-input"
+          type="{{item.inputType}}"
+          value="{{params[item.key]}}"
+          placeholder="0"
+          cursor-spacing="28"
+          aria-label="{{item.label}}，单位{{item.unit}}"
+          data-key="{{item.key}}"
+          data-group="basic"
+          data-index="{{index}}"
+          confirm-type="{{item.confirmType}}"
+          focus="{{focusedField === item.key}}"
+          bindinput="onFieldInput"
+          bindconfirm="onFieldConfirm"
+          bindfocus="onFieldFocus"
+        />
+        <text class="field-unit">{{item.unit}}</text>
+      </view>
+      <text wx:if="{{errorField === item.key}}" class="field-error-text">请检查此项</text>
+    </view>
+  </view>
+
+  <view wx:if="{{advancedFields.length}}" class="advanced-section">
+    <view class="advanced-toggle" aria-role="button" aria-label="{{advancedOpen ? '收起采购与工艺参数' : '展开采购与工艺参数'}}" bindtap="onToggleAdvanced">
+      <view class="advanced-copy">
+        <text class="advanced-no">02</text>
+        <view class="advanced-content">
+          <view class="advanced-title-row">
+            <text class="advanced-title">采购与工艺参数</text>
+            <view class="advanced-state">
+              <text>{{advancedOpen ? '收起设置' : '展开设置'}}</text>
+              <view class="advanced-arrow {{advancedOpen ? 'up' : ''}}"></view>
+            </view>
+          </view>
+          <text class="advanced-desc">{{advancedOpen ? '包装规格、损耗率和单位用量' : advancedSummary}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{advancedOpen}}" class="field-grid advanced-grid">
+      <view
+        wx:for="{{advancedFields}}"
+        wx:key="key"
+        id="field-{{item.key}}"
+        class="field-cell advanced-cell {{errorField === item.key ? 'field-cell-error' : ''}}"
+      >
+        <view class="field-cell-head">
+          <text class="field-label">{{item.label}}</text>
+          <text class="field-order">A{{index + 1}}</text>
+        </view>
+        <text wx:if="{{item.note}}" class="field-note">{{item.note}}</text>
+        <view class="field-entry">
+          <input class="field-input" type="{{item.inputType}}" value="{{params[item.key]}}" placeholder="0" confirm-type="{{item.confirmType}}" cursor-spacing="28" focus="{{focusedField === item.key}}" aria-label="{{item.label}}，单位{{item.unit}}" data-key="{{item.key}}" data-group="advanced" data-index="{{index}}" bindinput="onFieldInput" bindconfirm="onFieldConfirm" bindfocus="onFieldFocus" />
+          <text class="field-unit">{{item.unit}}</text>
+        </view>
+        <text wx:if="{{errorField === item.key}}" class="field-error-text">请检查此项</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-dock">
+    <view class="reset-button" aria-role="button" bindtap="onReset">
+      <text class="reset-icon">↺</text>
+      <text>恢复示例</text>
+    </view>
+    <view class="calculate-button" aria-role="button" bindtap="onCalculate">
+      <text>生成采购清单</text>
+      <text class="calculate-arrow">→</text>
+    </view>
+  </view>
+  <view class="method-link" aria-role="button" bindtap="onOpenGuide">查看测量方法与计算口径</view>
+
+  <block wx:if="{{showResult && result}}">
+    <view id="result-anchor" class="result-sheet">
+      <view class="result-sheet-top" style="background: {{result.accent}};">
+        <view>
+          <text class="result-kicker">材料采购估算</text>
+          <text class="result-title">材料用量单</text>
+        </view>
+        <text class="result-tool">{{result.toolName}}</text>
+      </view>
+      <view class="result-primary">
+        <view>
+          <text class="result-primary-label">{{result.primary.label}}</text>
+          <text class="result-primary-hint">{{result.primary.hint}}</text>
+        </view>
+        <view class="result-number"><text class="result-primary-value">{{result.primary.value}}</text><text class="result-primary-unit">{{result.primary.unit}}</text></view>
+      </view>
+      <view class="result-rule"><text></text><text></text><text></text><text></text><text></text><text></text><text></text><text></text></view>
+      <view class="purchase-head">
+        <text class="purchase-title">采购项目</text>
+        <button class="result-action" bindtap="onCopyResult" aria-label="复制当前采购清单">复制清单</button>
+        <button class="result-action" open-type="share" aria-label="分享当前计算结果">分享结果</button>
+      </view>
+      <view class="purchase-list">
+        <view wx:for="{{result.purchases}}" wx:key="label" class="purchase-row">
+          <text class="purchase-index">0{{index + 1}}</text>
+          <view class="purchase-copy">
+            <text class="purchase-name">{{item.label}}</text>
+            <text class="purchase-detail">{{item.detail}}</text>
+          </view>
+          <view class="purchase-value"><text>{{item.quantity}}</text><text class="purchase-unit">{{item.unit}}</text></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="record-name-sheet">
+      <view class="record-name-copy">
+        <text class="record-name-title">位置 / 记录名称</text>
+        <text class="record-name-desc">选填，便于区分主卫、厨房等同类记录</text>
+      </view>
+      <input value="{{recordName}}" maxlength="24" placeholder="例如：主卫墙面" confirm-type="done" aria-label="位置或记录名称" bindinput="onRecordNameInput" />
+    </view>
+
+    <view wx:if="{{result.layoutPlans.length}}" class="layout-sheet">
+      <view class="layout-head"><text>排布方向比较</text><text>数量仅供选向参考</text></view>
+      <view class="layout-plans">
+        <view wx:for="{{result.layoutPlans}}" wx:key="id" class="layout-plan {{item.selected ? 'selected' : ''}}">
+          <view class="layout-plan-copy"><text>{{item.name}}</text><text>{{item.layout}} 行列<text wx:if="{{item.note}}"> · {{item.note}}</text></text></view>
+          <view class="layout-plan-result"><text>{{item.quantity}}{{item.unit}}</text><text wx:if="{{item.selected}}">当前采用</text><text wx:else data-action="{{item.action}}" aria-role="button" aria-label="采用{{item.name}}" bindtap="onApplyLayoutPlan">采用此方向</text></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="budget-sheet">
+      <view class="budget-toggle" aria-role="button" aria-label="{{budgetOpen ? '收起采购预算' : '展开采购预算'}}" bindtap="onToggleBudget">
+        <view class="budget-copy">
+          <text class="budget-kicker">选填 · 费用估算</text>
+          <view class="budget-title-row">
+            <text class="budget-title">采购预算</text>
+            <view class="budget-total-preview">
+              <text wx:if="{{budgetOpen}}">收起预算</text>
+              <text wx:elif="{{budgetTotal !== '0.00'}}">¥{{budgetTotal}} · 修改</text>
+              <text wx:else>填写单价</text>
+              <view class="advanced-arrow {{budgetOpen ? 'up' : ''}}"></view>
+            </view>
+          </view>
+          <text class="budget-desc">填入材料单价后自动汇总</text>
+        </view>
+      </view>
+      <view wx:if="{{budgetOpen}}" class="budget-body">
+        <view wx:for="{{budgetLines}}" wx:key="label" class="budget-line">
+          <view class="budget-line-copy">
+            <text class="budget-line-name">{{item.label}}</text>
+            <text class="budget-line-qty">{{item.quantity}}{{item.unit}}</text>
+          </view>
+          <view class="price-control">
+            <text class="currency">¥</text>
+            <input type="digit" value="{{item.price}}" placeholder="单价" confirm-type="done" cursor-spacing="28" aria-label="{{item.label}}单价" data-index="{{index}}" bindinput="onPriceInput" />
+            <text class="price-unit">/{{item.unit}}</text>
+          </view>
+          <text class="subtotal">¥{{item.subtotal}}</text>
+        </view>
+        <view class="budget-sum"><text>预计材料合计</text><text class="budget-sum-value">¥{{budgetTotal}}</text></view>
+        <text class="budget-note">不含人工、运输、税费及施工附加项目，仅汇总已填写单价的材料。</text>
+      </view>
+    </view>
+
+    <view class="sheet-heading result-heading">
+      <view><text class="sheet-index">03</text><text class="sheet-title">数据复核</text></view>
+      <text class="sheet-note">净量与含损耗量分列</text>
+    </view>
+    <view class="metrics-grid">
+      <view wx:for="{{result.metrics}}" wx:key="label" class="metric-cell {{item.emphasis ? 'metric-emphasis' : ''}}">
+        <text class="metric-label">{{item.label}}</text>
+        <view><text class="metric-value">{{item.value}}</text><text class="metric-unit">{{item.unit}}</text></view>
+      </view>
+    </view>
+
+    <view class="audit-card">
+      <view class="audit-head"><text>计算过程</text><text>逐项复核</text></view>
+      <view wx:for="{{result.formula}}" wx:key="*this" class="audit-line">
+        <text class="audit-number">{{index + 1}}</text><text>{{item}}</text>
+      </view>
+    </view>
+
+    <view class="audit-card">
+      <view class="audit-head"><text>本次口径</text><text>参数说明</text></view>
+      <view wx:for="{{result.assumptions}}" wx:key="*this" class="assumption-line"><text class="assumption-dot"></text><text>{{item}}</text></view>
+    </view>
+
+    <view wx:if="{{result.warnings.length}}" class="warning-card">
+      <view class="warning-title">使用前请确认</view>
+      <text wx:for="{{result.warnings}}" wx:key="*this" class="warning-line">{{item}}</text>
+    </view>
+
+    <view class="result-disclaimer">{{result.disclaimer}}</view>
+  </block>
+
+  <view class="safe-bottom"></view>
+</view>

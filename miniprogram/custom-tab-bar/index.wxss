@@ -1,0 +1,11 @@
+.tabbar-shell { position: fixed; z-index: 9999; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; height: calc(108rpx + env(safe-area-inset-bottom)); padding: 8rpx 70rpx env(safe-area-inset-bottom); border-top: 1rpx solid #D5CCBE; background: rgba(255,253,248,.97); box-shadow: 0 -10rpx 30rpx rgba(55,47,37,.08); }
+.tabbar-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #746C61; font-size: 25rpx; font-weight: 650; }
+.tabbar-icon { position: relative; width: 46rpx; height: 42rpx; margin-bottom: 4rpx; color: currentColor; }
+.home-roof { position: absolute; left: 8rpx; top: 2rpx; width: 29rpx; height: 29rpx; border-top: 5rpx solid currentColor; border-left: 5rpx solid currentColor; transform: rotate(45deg); }
+.home-body { position: absolute; left: 9rpx; bottom: 1rpx; width: 30rpx; height: 25rpx; border: 4rpx solid currentColor; border-top: 0; }
+.home-door { position: absolute; right: 4rpx; bottom: 0; width: 8rpx; height: 13rpx; background: currentColor; }
+.profile-head { position: absolute; left: 14rpx; top: 0; width: 18rpx; height: 18rpx; border: 4rpx solid currentColor; border-radius: 50%; }
+.profile-body { position: absolute; left: 7rpx; bottom: 0; width: 32rpx; height: 19rpx; border: 4rpx solid currentColor; border-bottom: 0; border-radius: 20rpx 20rpx 0 0; }
+.active { color: #A85037; }
+.active-mark { position: absolute; bottom: 1rpx; width: 38rpx; height: 4rpx; background: transparent; }
+.active .active-mark { background: #A85037; }
