@@ -20,8 +20,15 @@
       </view>
 
       <view class="drawing-area">
+        <view class="drawing-status">
+          <text class="drawing-status-dot" style="background: {{tool.accent}};"></text>
+          <text>动态施工演示</text>
+        </view>
         <view class="scene scene-{{tool.visualType}}" style="color: {{tool.accent}};">
+          <view class="scene-depth"></view>
           <view class="scene-surface"></view>
+          <view class="scene-motion"></view>
+          <view class="scene-tool"></view>
           <view class="scene-part part-a"></view>
           <view class="scene-part part-b"></view>
           <view class="scene-part part-c"></view>
@@ -30,6 +37,9 @@
           <view class="scene-part part-f"></view>
           <view class="scene-part part-g"></view>
           <view class="scene-part part-h"></view>
+          <view class="scene-spark spark-a"></view>
+          <view class="scene-spark spark-b"></view>
+          <view class="scene-spark spark-c"></view>
           <text class="scene-label">{{tool.visualLabel}}</text>
         </view>
 

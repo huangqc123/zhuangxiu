@@ -12,16 +12,26 @@
 .cover-favorite { position: relative; z-index: 3; display: flex; align-items: center; justify-content: center; width: 58rpx; height: 58rpx; margin-left: 12rpx; border: 1rpx solid rgba(255,255,255,.22); color: rgba(255,255,255,.62); font-size: 34rpx; }
 .cover-favorite.active { color: #F3C86A; border-color: rgba(243,200,106,.6); background: rgba(243,200,106,.08); }
 
-/* 各材料独立施工示意图：直接随页面编译，避免旧版工具的组件兼容问题 */
+/* 轻量施工动画：全部使用 WXSS 图形与 transform/opacity 动画，不依赖图片资源 */
 .drawing-board { position: relative; z-index: 2; margin-top: 28rpx; padding: 18rpx; color: #32322E; background: #F5F0E7; box-shadow: 0 8rpx 22rpx rgba(0,0,0,.14); }
 .drawing-topline { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12rpx; border-bottom: 1rpx solid #D8D0C3; }
 .drawing-title { font-size: 24rpx; font-weight: 760; }
 .drawing-scale { color: #756D62; font-size: 21rpx; }
-.drawing-area { position: relative; height: 258rpx; margin-top: 12rpx; overflow: hidden; background-color: #F8F4EC; background-image: linear-gradient(rgba(68,65,58,.06) 1rpx, transparent 1rpx), linear-gradient(90deg, rgba(68,65,58,.06) 1rpx, transparent 1rpx); background-size: 28rpx 28rpx; }
-.scene { position: absolute; left: 34rpx; right: 34rpx; top: 16rpx; height: 158rpx; }
-.scene-surface, .scene-part { position: absolute; }
-.scene-surface { box-sizing: border-box; border: 3rpx solid currentColor; background-color: #EFE9DE; }
-.scene-label { position: absolute; right: 0; top: 0; padding: 6rpx 11rpx; color: currentColor; border: 1rpx solid currentColor; background: #F8F4EC; font-size: 19rpx; font-weight: 760; }
+.drawing-area { position: relative; height: 286rpx; margin-top: 12rpx; overflow: hidden; background-color: #F8F4EC; background-image: linear-gradient(rgba(68,65,58,.06) 1rpx, transparent 1rpx), linear-gradient(90deg, rgba(68,65,58,.06) 1rpx, transparent 1rpx); background-size: 28rpx 28rpx; }
+.drawing-area::before, .drawing-area::after { position: absolute; z-index: 5; width: 24rpx; height: 24rpx; border-color: #BDB3A5; content: ''; pointer-events: none; }
+.drawing-area::before { left: 8rpx; top: 8rpx; border-left: 2rpx solid #BDB3A5; border-top: 2rpx solid #BDB3A5; }
+.drawing-area::after { right: 8rpx; bottom: 8rpx; border-right: 2rpx solid #BDB3A5; border-bottom: 2rpx solid #BDB3A5; }
+.drawing-status { position: absolute; z-index: 7; left: 18rpx; top: 12rpx; display: flex; align-items: center; color: #7E7568; font-size: 17rpx; letter-spacing: 1rpx; }
+.drawing-status-dot { display: block; flex: 0 0 auto; width: 8rpx; height: 8rpx; margin-right: 9rpx; border-radius: 50%; animation: statusPulse 2.2s ease-in-out infinite; }
+.scene { position: absolute; left: 34rpx; right: 34rpx; top: 34rpx; height: 170rpx; }
+.scene-depth, .scene-surface, .scene-motion, .scene-tool, .scene-part, .scene-spark { position: absolute; box-sizing: border-box; }
+.scene-depth { opacity: .12; background: currentColor; }
+.scene-surface { z-index: 2; border: 3rpx solid currentColor; background-color: #EFE9DE; }
+.scene-motion { z-index: 4; }
+.scene-tool { z-index: 6; }
+.scene-part { z-index: 3; }
+.scene-spark { z-index: 5; display: none; width: 7rpx; height: 7rpx; border-radius: 50%; background: currentColor; }
+.scene-label { position: absolute; z-index: 8; right: 0; top: 0; padding: 6rpx 11rpx; color: currentColor; border: 1rpx solid currentColor; background: rgba(248,244,236,.94); font-size: 19rpx; font-weight: 760; }
 .measure-strip { position: absolute; left: 18rpx; right: 18rpx; bottom: 12rpx; display: grid; grid-template-columns: 1fr 1fr; min-height: 58rpx; border-top: 1rpx solid #8D8477; }
 .measure-item { display: flex; align-items: center; justify-content: space-between; min-width: 0; padding: 9rpx 12rpx 0 0; }
 .measure-item-right { padding: 9rpx 0 0 12rpx; border-left: 1rpx solid #CFC6B8; }
@@ -31,63 +41,177 @@
 .caption-bullet { flex: 0 0 auto; width: 8rpx; height: 8rpx; margin: 12rpx 10rpx 0 1rpx; }
 .caption-copy { color: #665F55; font-size: 22rpx; line-height: 34rpx; }
 
-.scene-floor-tile .scene-surface { left: 52rpx; right: 52rpx; top: 17rpx; bottom: 8rpx; background-image: linear-gradient(rgba(66,64,58,.2) 2rpx, transparent 2rpx), linear-gradient(90deg, rgba(66,64,58,.2) 2rpx, transparent 2rpx); background-size: 52rpx 43rpx; transform: skewX(-7deg); }
-.scene-floor-tile .part-a { left: 157rpx; top: 61rpx; width: 52rpx; height: 43rpx; border: 3rpx solid currentColor; transform: skewX(-7deg); }
-.scene-floor-tile .part-b { left: 33rpx; right: 34rpx; bottom: 0; border-bottom: 1rpx solid #736B60; }
+/* 地砖：砖片沿排布方向落位，十字定位点呼吸 */
+.scene-floor-tile .scene-depth { left: 48rpx; right: 48rpx; top: 30rpx; bottom: 0; transform: translate(10rpx, 8rpx) skewX(-7deg); }
+.scene-floor-tile .scene-surface { left: 48rpx; right: 48rpx; top: 22rpx; bottom: 10rpx; background-image: linear-gradient(rgba(66,64,58,.22) 2rpx, transparent 2rpx), linear-gradient(90deg, rgba(66,64,58,.22) 2rpx, transparent 2rpx); background-size: 52rpx 43rpx; transform: skewX(-7deg); }
+.scene-floor-tile .scene-motion { left: 48rpx; top: 22rpx; width: 52rpx; height: 43rpx; border: 3rpx solid currentColor; background: rgba(255,255,255,.72); animation: tileSet 4.8s cubic-bezier(.45,.05,.2,1) infinite; }
+.scene-floor-tile .scene-tool { left: 64rpx; bottom: 15rpx; width: 92rpx; height: 9rpx; border-radius: 6rpx 1rpx 1rpx 6rpx; background: currentColor; transform-origin: left center; animation: tileTrowel 4.8s ease-in-out infinite; }
+.scene-floor-tile .scene-tool::after { position: absolute; right: -24rpx; top: -9rpx; width: 28rpx; height: 25rpx; border: 3rpx solid currentColor; border-left: 0; content: ''; }
+.scene-floor-tile .part-a { left: 152rpx; top: 65rpx; width: 52rpx; height: 43rpx; border: 3rpx solid currentColor; background: currentColor; opacity: .15; transform: skewX(-7deg); animation: tileFocus 4.8s ease-in-out infinite; }
+.scene-floor-tile .part-b { left: 30rpx; right: 30rpx; bottom: 2rpx; border-bottom: 1rpx solid #736B60; }
+.scene-floor-tile .scene-spark { display: block; animation: markerPulse 2.4s ease-in-out infinite; }
+.scene-floor-tile .spark-a { left: 150rpx; top: 62rpx; }
+.scene-floor-tile .spark-b { left: 205rpx; top: 62rpx; animation-delay: -.8s; }
+.scene-floor-tile .spark-c { left: 202rpx; top: 108rpx; animation-delay: -1.6s; }
 
-.scene-wall-tile .scene-surface { left: 45rpx; right: 45rpx; top: 9rpx; bottom: 4rpx; background-image: linear-gradient(rgba(66,64,58,.18) 2rpx, transparent 2rpx), linear-gradient(90deg, rgba(66,64,58,.18) 2rpx, transparent 2rpx); background-size: 48rpx 36rpx; }
-.scene-wall-tile .part-a { left: 96rpx; bottom: 4rpx; width: 61rpx; height: 88rpx; border: 3rpx solid currentColor; border-bottom: 0; background: #F8F4EC; }
-.scene-wall-tile .part-b { left: 45rpx; right: 45rpx; top: 45rpx; height: 22rpx; background: currentColor; opacity: .12; }
+/* 墙砖：单砖贴墙并出现水平找平扫描线 */
+.scene-wall-tile .scene-depth { left: 41rpx; right: 49rpx; top: 17rpx; bottom: 0; transform: translate(9rpx, 8rpx); }
+.scene-wall-tile .scene-surface { left: 41rpx; right: 49rpx; top: 9rpx; bottom: 8rpx; background-image: linear-gradient(rgba(66,64,58,.19) 2rpx, transparent 2rpx), linear-gradient(90deg, rgba(66,64,58,.19) 2rpx, transparent 2rpx); background-size: 48rpx 36rpx; }
+.scene-wall-tile .scene-motion { left: 90rpx; top: 45rpx; width: 48rpx; height: 36rpx; border: 3rpx solid currentColor; background: #F8F4EC; animation: wallTileSet 4.6s cubic-bezier(.2,.7,.25,1) infinite; }
+.scene-wall-tile .scene-tool { left: 48rpx; right: 58rpx; top: 40rpx; height: 3rpx; background: currentColor; opacity: .55; animation: levelScan 3.2s ease-in-out infinite; }
+.scene-wall-tile .part-a { z-index: 5; left: 93rpx; bottom: 8rpx; width: 61rpx; height: 88rpx; border: 3rpx solid currentColor; border-bottom: 0; background: #F8F4EC; }
+.scene-wall-tile .part-b { left: 41rpx; right: 49rpx; top: 45rpx; height: 22rpx; background: currentColor; opacity: .1; }
+.scene-wall-tile .part-c { right: 74rpx; top: 71rpx; width: 54rpx; height: 6rpx; border-radius: 6rpx; background: currentColor; animation: groutSweep 4.6s ease-in-out infinite; }
+.scene-wall-tile .scene-spark { display: block; animation: markerPulse 2s ease-in-out infinite; }
+.scene-wall-tile .spark-a { left: 184rpx; top: 42rpx; }
+.scene-wall-tile .spark-b { left: 232rpx; top: 78rpx; animation-delay: -1s; }
 
-.scene-flooring .scene-surface { left: 35rpx; right: 35rpx; top: 17rpx; bottom: 6rpx; background-image: repeating-linear-gradient(0deg, transparent 0, transparent 31rpx, rgba(66,64,58,.22) 31rpx, rgba(66,64,58,.22) 33rpx), repeating-linear-gradient(90deg, transparent 0, transparent 104rpx, rgba(66,64,58,.2) 104rpx, rgba(66,64,58,.2) 106rpx); transform: skewX(-8deg); }
-.scene-flooring .part-a { left: 116rpx; top: 50rpx; bottom: 38rpx; border-left: 2rpx solid currentColor; transform: skewX(-8deg); }
-.scene-flooring .part-b { left: 219rpx; top: 83rpx; bottom: 6rpx; border-left: 2rpx solid currentColor; transform: skewX(-8deg); }
-.scene-flooring .part-c { left: 66rpx; right: 66rpx; top: 49rpx; height: 33rpx; border: 2rpx solid currentColor; background: currentColor; opacity: .12; transform: skewX(-8deg); }
+/* 木地板：一块长板沿铺向滑入，光带展示错缝关系 */
+.scene-flooring .scene-depth { left: 31rpx; right: 38rpx; top: 30rpx; bottom: 0; transform: translate(10rpx, 8rpx) skewX(-8deg); }
+.scene-flooring .scene-surface { left: 31rpx; right: 38rpx; top: 20rpx; bottom: 9rpx; background-image: repeating-linear-gradient(0deg, transparent 0, transparent 31rpx, rgba(66,64,58,.22) 31rpx, rgba(66,64,58,.22) 33rpx), repeating-linear-gradient(90deg, transparent 0, transparent 104rpx, rgba(66,64,58,.2) 104rpx, rgba(66,64,58,.2) 106rpx); transform: skewX(-8deg); }
+.scene-flooring .scene-motion { left: 40rpx; top: 54rpx; width: 104rpx; height: 33rpx; border: 3rpx solid currentColor; background: rgba(255,255,255,.72); animation: boardSlide 4.4s cubic-bezier(.2,.75,.2,1) infinite; }
+.scene-flooring .scene-tool { left: 54rpx; top: 27rpx; width: 145rpx; height: 2rpx; background: currentColor; opacity: .55; animation: flooringGuide 4.4s ease-in-out infinite; }
+.scene-flooring .scene-tool::after { position: absolute; right: -1rpx; top: -6rpx; width: 13rpx; height: 13rpx; border-right: 3rpx solid currentColor; border-top: 3rpx solid currentColor; transform: rotate(45deg); content: ''; }
+.scene-flooring .part-a { left: 112rpx; top: 52rpx; bottom: 40rpx; border-left: 2rpx solid currentColor; transform: skewX(-8deg); }
+.scene-flooring .part-b { left: 215rpx; top: 85rpx; bottom: 9rpx; border-left: 2rpx solid currentColor; transform: skewX(-8deg); }
+.scene-flooring .part-c { left: 62rpx; right: 69rpx; top: 52rpx; height: 33rpx; background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent); opacity: .7; transform: skewX(-8deg); animation: boardSheen 3.6s ease-in-out infinite; }
 
-.scene-paint .scene-surface { left: 40rpx; right: 46rpx; top: 11rpx; bottom: 5rpx; }
-.scene-paint .part-a { left: 43rpx; top: 14rpx; width: 178rpx; height: 105rpx; background: currentColor; opacity: .15; }
-.scene-paint .part-b { right: 83rpx; top: 37rpx; width: 82rpx; height: 25rpx; border: 3rpx solid currentColor; border-radius: 14rpx; background: #F8F4EC; }
-.scene-paint .part-c { right: 95rpx; top: 62rpx; width: 40rpx; height: 64rpx; border-right: 4rpx solid currentColor; border-bottom: 4rpx solid currentColor; transform: skewX(-18deg); }
+/* 乳胶漆：滚筒往复，涂层随滚动逐步覆盖 */
+.scene-paint .scene-depth { left: 36rpx; right: 50rpx; top: 19rpx; bottom: 0; transform: translate(9rpx, 8rpx); }
+.scene-paint .scene-surface { left: 36rpx; right: 50rpx; top: 11rpx; bottom: 8rpx; background-image: linear-gradient(90deg, transparent 49.5%, rgba(72,68,61,.1) 50%, transparent 50.5%); }
+.scene-paint .part-a { left: 39rpx; top: 14rpx; width: 206rpx; height: 112rpx; background: currentColor; opacity: .16; transform-origin: left center; animation: paintCoverage 5s ease-in-out infinite; }
+.scene-paint .part-b { z-index: 6; right: 77rpx; top: 33rpx; width: 82rpx; height: 25rpx; border: 3rpx solid currentColor; border-radius: 14rpx; background: #F8F4EC; animation: paintRoller 5s ease-in-out infinite; }
+.scene-paint .part-b::before, .scene-paint .part-b::after { position: absolute; top: 4rpx; width: 5rpx; height: 11rpx; background: currentColor; content: ''; }
+.scene-paint .part-b::before { left: 8rpx; }
+.scene-paint .part-b::after { right: 8rpx; }
+.scene-paint .part-c { z-index: 6; right: 89rpx; top: 58rpx; width: 40rpx; height: 68rpx; border-right: 4rpx solid currentColor; border-bottom: 4rpx solid currentColor; transform: skewX(-18deg); animation: paintHandle 5s ease-in-out infinite; }
+.scene-paint .scene-motion { left: 44rpx; top: 19rpx; width: 18rpx; height: 100rpx; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation: wetPaintShine 5s ease-in-out infinite; }
+.scene-paint .scene-spark { display: block; width: 6rpx; height: 12rpx; border-radius: 55% 55% 55% 0; animation: paintDrop 2.8s ease-in infinite; }
+.scene-paint .spark-a { right: 144rpx; top: 64rpx; }
+.scene-paint .spark-b { right: 117rpx; top: 84rpx; animation-delay: -1.4s; }
 
-.scene-wallpaper .scene-surface { left: 44rpx; right: 61rpx; top: 8rpx; bottom: 4rpx; background-image: repeating-linear-gradient(90deg, transparent 0, transparent 58rpx, rgba(66,64,58,.25) 58rpx, rgba(66,64,58,.25) 60rpx), radial-gradient(circle, rgba(66,64,58,.18) 0 5rpx, transparent 6rpx); background-size: auto, 58rpx 46rpx; }
-.scene-wallpaper .part-a { right: 34rpx; top: 10rpx; width: 43rpx; bottom: 5rpx; border: 3rpx solid currentColor; border-radius: 21rpx 21rpx 8rpx 8rpx; background: #F8F4EC; }
-.scene-wallpaper .part-b { right: 29rpx; bottom: 3rpx; width: 53rpx; height: 21rpx; border: 3rpx solid currentColor; border-radius: 50%; background: #EFE9DE; }
-.scene-wallpaper .part-c { right: 41rpx; top: 24rpx; bottom: 17rpx; width: 29rpx; background: currentColor; opacity: .13; }
-.scene-wallpaper .part-d { right: 29rpx; top: 3rpx; width: 53rpx; height: 21rpx; border: 3rpx solid currentColor; border-radius: 50%; background: #F8F4EC; }
+/* 壁纸：纸卷轻摆并向下展开，刮板逐段压实 */
+.scene-wallpaper .scene-depth { left: 40rpx; right: 65rpx; top: 16rpx; bottom: 0; transform: translate(9rpx, 8rpx); }
+.scene-wallpaper .scene-surface { left: 40rpx; right: 65rpx; top: 8rpx; bottom: 8rpx; background-image: repeating-linear-gradient(90deg, transparent 0, transparent 58rpx, rgba(66,64,58,.23) 58rpx, rgba(66,64,58,.23) 60rpx), radial-gradient(circle, rgba(66,64,58,.17) 0 5rpx, transparent 6rpx); background-size: auto, 58rpx 46rpx; }
+.scene-wallpaper .scene-motion { right: 69rpx; top: 18rpx; width: 58rpx; height: 128rpx; border: 2rpx solid currentColor; border-top: 0; background-color: rgba(255,255,255,.58); background-image: radial-gradient(circle, currentColor 0 4rpx, transparent 5rpx); background-size: 58rpx 46rpx; transform-origin: center top; animation: paperUnroll 4.8s ease-in-out infinite; }
+.scene-wallpaper .scene-tool { right: 82rpx; top: 48rpx; width: 72rpx; height: 18rpx; border-bottom: 7rpx solid currentColor; transform: rotate(-5deg); animation: wallpaperSqueegee 4.8s ease-in-out infinite; }
+.scene-wallpaper .part-a { z-index: 6; right: 29rpx; top: 12rpx; width: 43rpx; bottom: 8rpx; border: 3rpx solid currentColor; border-radius: 21rpx 21rpx 8rpx 8rpx; background: #F8F4EC; animation: rollBreathe 4.8s ease-in-out infinite; }
+.scene-wallpaper .part-b { z-index: 6; right: 24rpx; bottom: 6rpx; width: 53rpx; height: 21rpx; border: 3rpx solid currentColor; border-radius: 50%; background: #EFE9DE; animation: rollBreathe 4.8s ease-in-out infinite; }
+.scene-wallpaper .part-c { z-index: 6; right: 36rpx; top: 26rpx; bottom: 20rpx; width: 29rpx; background: currentColor; opacity: .13; animation: rollBreathe 4.8s ease-in-out infinite; }
+.scene-wallpaper .part-d { z-index: 6; right: 24rpx; top: 5rpx; width: 53rpx; height: 21rpx; border: 3rpx solid currentColor; border-radius: 50%; background: #F8F4EC; animation: rollBreathe 4.8s ease-in-out infinite; }
 
-.scene-waterproof .scene-surface { left: 48rpx; right: 48rpx; top: 46rpx; bottom: 5rpx; transform: skewX(-10deg); }
-.scene-waterproof .part-a { left: 48rpx; right: 48rpx; top: 16rpx; height: 48rpx; border: 3rpx solid currentColor; border-bottom: 0; background: currentColor; opacity: .13; }
-.scene-waterproof .part-b { left: 70rpx; right: 70rpx; top: 67rpx; bottom: 23rpx; background: currentColor; opacity: .14; transform: skewX(-10deg); }
-.scene-waterproof .part-c { right: 92rpx; top: 67rpx; width: 31rpx; height: 31rpx; border-radius: 50% 50% 50% 0; background: currentColor; transform: rotate(-45deg); }
+/* 防水：墙地涂膜呼吸，刷头横向涂覆，水滴落下形成波纹 */
+.scene-waterproof .scene-depth { left: 44rpx; right: 52rpx; top: 55rpx; bottom: 0; transform: translate(10rpx, 8rpx) skewX(-10deg); }
+.scene-waterproof .scene-surface { left: 44rpx; right: 52rpx; top: 47rpx; bottom: 9rpx; transform: skewX(-10deg); }
+.scene-waterproof .part-a { left: 44rpx; right: 52rpx; top: 17rpx; height: 49rpx; border: 3rpx solid currentColor; border-bottom: 0; background: currentColor; opacity: .13; animation: membranePulse 4.2s ease-in-out infinite; }
+.scene-waterproof .part-b { left: 66rpx; right: 74rpx; top: 68rpx; bottom: 27rpx; background: currentColor; opacity: .16; transform: skewX(-10deg); animation: membranePulse 4.2s ease-in-out infinite -.8s; }
+.scene-waterproof .part-c { z-index: 6; right: 88rpx; top: 54rpx; width: 28rpx; height: 28rpx; border-radius: 50% 50% 50% 0; background: currentColor; transform: rotate(-45deg); animation: waterDrop 3.2s cubic-bezier(.45,.05,.7,.2) infinite; }
+.scene-waterproof .scene-motion { left: 69rpx; top: 80rpx; width: 82rpx; height: 20rpx; border-bottom: 8rpx solid currentColor; transform: skewX(-10deg); animation: waterproofBrush 4.2s ease-in-out infinite; }
+.scene-waterproof .scene-tool { left: 106rpx; top: 43rpx; width: 9rpx; height: 55rpx; background: currentColor; transform: rotate(-18deg); animation: waterproofHandle 4.2s ease-in-out infinite; }
+.scene-waterproof .scene-spark { display: block; width: 34rpx; height: 10rpx; border: 2rpx solid currentColor; border-radius: 50%; background: transparent; animation: waterRipple 3.2s ease-out infinite; }
+.scene-waterproof .spark-a { right: 84rpx; bottom: 27rpx; }
+.scene-waterproof .spark-b { right: 84rpx; bottom: 27rpx; animation-delay: -1.6s; }
 
-.scene-ceiling .scene-surface { left: 39rpx; right: 39rpx; top: 17rpx; bottom: 5rpx; background-image: linear-gradient(rgba(66,64,58,.18) 2rpx, transparent 2rpx), linear-gradient(90deg, rgba(66,64,58,.18) 2rpx, transparent 2rpx); background-size: 55rpx 42rpx; transform: skewX(7deg); }
-.scene-ceiling .part-a { left: 77rpx; right: 55rpx; top: 55rpx; border-top: 5rpx solid currentColor; transform: skewX(7deg); }
-.scene-ceiling .part-b { left: 77rpx; right: 55rpx; top: 98rpx; border-top: 5rpx solid currentColor; transform: skewX(7deg); }
-.scene-ceiling .part-c { left: 101rpx; top: 0; height: 55rpx; border-left: 2rpx solid currentColor; }
-.scene-ceiling .part-d { right: 108rpx; top: 0; height: 55rpx; border-left: 2rpx solid currentColor; }
-.scene-ceiling .part-e, .scene-ceiling .part-f { top: -3rpx; width: 10rpx; height: 10rpx; border-radius: 50%; background: currentColor; }
-.scene-ceiling .part-e { left: 96rpx; }
-.scene-ceiling .part-f { right: 103rpx; }
+/* 吊顶：面板从下方升入龙骨网格，吊点依次闪烁 */
+.scene-ceiling .scene-depth { left: 36rpx; right: 42rpx; top: 30rpx; bottom: 0; transform: translate(10rpx, 8rpx) skewX(7deg); }
+.scene-ceiling .scene-surface { left: 36rpx; right: 42rpx; top: 20rpx; bottom: 9rpx; background-image: linear-gradient(rgba(66,64,58,.18) 2rpx, transparent 2rpx), linear-gradient(90deg, rgba(66,64,58,.18) 2rpx, transparent 2rpx); background-size: 55rpx 42rpx; transform: skewX(7deg); }
+.scene-ceiling .scene-motion { left: 94rpx; top: 67rpx; width: 55rpx; height: 42rpx; border: 3rpx solid currentColor; background: rgba(255,255,255,.78); animation: ceilingPanelLift 4.8s cubic-bezier(.2,.7,.25,1) infinite; }
+.scene-ceiling .scene-tool { left: 60rpx; right: 70rpx; top: 52rpx; height: 3rpx; background: currentColor; opacity: .55; animation: ceilingScan 3.5s ease-in-out infinite; }
+.scene-ceiling .part-a { left: 74rpx; right: 58rpx; top: 58rpx; border-top: 5rpx solid currentColor; transform: skewX(7deg); }
+.scene-ceiling .part-b { left: 74rpx; right: 58rpx; top: 101rpx; border-top: 5rpx solid currentColor; transform: skewX(7deg); }
+.scene-ceiling .part-c { left: 98rpx; top: 0; height: 58rpx; border-left: 2rpx solid currentColor; }
+.scene-ceiling .part-d { right: 111rpx; top: 0; height: 58rpx; border-left: 2rpx solid currentColor; }
+.scene-ceiling .part-e, .scene-ceiling .part-f { z-index: 6; top: -3rpx; width: 11rpx; height: 11rpx; border-radius: 50%; background: currentColor; animation: hangerPulse 2.4s ease-in-out infinite; }
+.scene-ceiling .part-e { left: 93rpx; }
+.scene-ceiling .part-f { right: 106rpx; animation-delay: -1.2s; }
 
-.scene-brick-wall .scene-surface { left: 41rpx; right: 41rpx; top: 8rpx; bottom: 4rpx; background-image: linear-gradient(rgba(66,64,58,.2) 2rpx, transparent 2rpx), repeating-linear-gradient(90deg, transparent 0, transparent 67rpx, rgba(66,64,58,.2) 67rpx, rgba(66,64,58,.2) 69rpx); background-size: 100% 35rpx, 138rpx 70rpx; }
-.scene-brick-wall .part-a { left: 137rpx; bottom: 4rpx; width: 67rpx; height: 87rpx; border: 3rpx solid currentColor; border-bottom: 0; background: #F8F4EC; }
-.scene-brick-wall .part-b { left: 74rpx; top: 43rpx; width: 68rpx; height: 35rpx; border: 2rpx solid currentColor; }
+/* 砌墙：砌块从侧面就位，灰缝刮尺随后扫过 */
+.scene-brick-wall .scene-depth { left: 37rpx; right: 45rpx; top: 16rpx; bottom: 0; transform: translate(9rpx, 8rpx); }
+.scene-brick-wall .scene-surface { left: 37rpx; right: 45rpx; top: 8rpx; bottom: 8rpx; background-image: linear-gradient(rgba(66,64,58,.2) 2rpx, transparent 2rpx), repeating-linear-gradient(90deg, transparent 0, transparent 67rpx, rgba(66,64,58,.2) 67rpx, rgba(66,64,58,.2) 69rpx); background-size: 100% 35rpx, 138rpx 70rpx; }
+.scene-brick-wall .scene-motion { left: 70rpx; top: 43rpx; width: 68rpx; height: 35rpx; border: 3rpx solid currentColor; background: #F8F4EC; animation: brickSet 4.5s cubic-bezier(.2,.75,.2,1) infinite; }
+.scene-brick-wall .scene-tool { left: 54rpx; top: 38rpx; width: 86rpx; height: 8rpx; border-radius: 7rpx 0 0 7rpx; background: currentColor; animation: mortarSweep 4.5s ease-in-out infinite; }
+.scene-brick-wall .scene-tool::after { position: absolute; right: -17rpx; top: -7rpx; width: 21rpx; height: 21rpx; border-right: 5rpx solid currentColor; border-bottom: 5rpx solid currentColor; content: ''; }
+.scene-brick-wall .part-a { z-index: 5; left: 133rpx; bottom: 8rpx; width: 67rpx; height: 87rpx; border: 3rpx solid currentColor; border-bottom: 0; background: #F8F4EC; }
+.scene-brick-wall .part-b { left: 70rpx; top: 43rpx; width: 68rpx; height: 35rpx; border: 2rpx solid currentColor; background: currentColor; opacity: .12; animation: brickFocus 4.5s ease-in-out infinite; }
+.scene-brick-wall .scene-spark { display: block; animation: dustFloat 3s ease-in-out infinite; }
+.scene-brick-wall .spark-a { left: 59rpx; top: 75rpx; }
+.scene-brick-wall .spark-b { left: 81rpx; top: 91rpx; animation-delay: -1s; }
+.scene-brick-wall .spark-c { left: 104rpx; top: 80rpx; animation-delay: -2s; }
 
-.scene-screed .scene-surface { left: 38rpx; right: 38rpx; top: 56rpx; bottom: 4rpx; border-color: #6E685E; background-image: repeating-linear-gradient(135deg, rgba(66,64,58,.16) 0, rgba(66,64,58,.16) 4rpx, transparent 4rpx, transparent 13rpx); }
-.scene-screed .part-a { left: 38rpx; right: 38rpx; top: 34rpx; height: 35rpx; border: 3rpx solid currentColor; background: currentColor; opacity: .17; }
-.scene-screed .part-b { right: 86rpx; top: 24rpx; width: 90rpx; height: 12rpx; background: currentColor; transform: rotate(-8deg); }
-.scene-screed .part-c { right: 116rpx; top: 0; width: 11rpx; height: 35rpx; background: currentColor; transform: rotate(24deg); }
+/* 找平砂浆：刮尺往复找平，完成区域出现流动高光 */
+.scene-screed .scene-depth { left: 34rpx; right: 42rpx; top: 66rpx; bottom: 0; transform: translate(9rpx, 8rpx); }
+.scene-screed .scene-surface { left: 34rpx; right: 42rpx; top: 58rpx; bottom: 8rpx; border-color: #6E685E; background-image: repeating-linear-gradient(135deg, rgba(66,64,58,.16) 0, rgba(66,64,58,.16) 4rpx, transparent 4rpx, transparent 13rpx); }
+.scene-screed .part-a { left: 34rpx; right: 42rpx; top: 36rpx; height: 35rpx; border: 3rpx solid currentColor; background: currentColor; opacity: .17; }
+.scene-screed .part-b { z-index: 6; right: 82rpx; top: 27rpx; width: 94rpx; height: 12rpx; background: currentColor; transform: rotate(-8deg); animation: screedBar 4s ease-in-out infinite; }
+.scene-screed .part-c { z-index: 6; right: 112rpx; top: 0; width: 11rpx; height: 38rpx; background: currentColor; transform: rotate(24deg); animation: screedHandle 4s ease-in-out infinite; }
+.scene-screed .scene-motion { left: 45rpx; top: 40rpx; width: 150rpx; height: 27rpx; background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent); transform-origin: left center; animation: screedLevel 4s ease-in-out infinite; }
+.scene-screed .scene-tool { right: 53rpx; top: 39rpx; height: 86rpx; border-right: 2rpx dashed currentColor; opacity: .55; }
+.scene-screed .scene-tool::before, .scene-screed .scene-tool::after { position: absolute; right: -7rpx; width: 13rpx; height: 2rpx; background: currentColor; content: ''; }
+.scene-screed .scene-tool::before { top: 0; }
+.scene-screed .scene-tool::after { bottom: 0; }
 
-.scene-concrete .scene-surface { left: 44rpx; right: 44rpx; top: 34rpx; bottom: 4rpx; border: 5rpx solid #6E685E; background: currentColor; opacity: .14; }
-.scene-concrete .part-a, .scene-concrete .part-b, .scene-concrete .part-c, .scene-concrete .part-d, .scene-concrete .part-e, .scene-concrete .part-f, .scene-concrete .part-g, .scene-concrete .part-h { width: 15rpx; height: 11rpx; border: 2rpx solid currentColor; border-radius: 55% 40% 60% 45%; background: currentColor; opacity: .42; transform: rotate(-18deg); }
-.scene-concrete .part-a { left: 82rpx; top: 58rpx; }
-.scene-concrete .part-b { left: 143rpx; top: 96rpx; transform: rotate(13deg); }
-.scene-concrete .part-c { right: 88rpx; top: 62rpx; transform: rotate(21deg); }
-.scene-concrete .part-d { right: 137rpx; top: 116rpx; }
-.scene-concrete .part-e { left: 108rpx; top: 124rpx; transform: rotate(18deg); }
-.scene-concrete .part-f { right: 119rpx; top: 91rpx; transform: rotate(-5deg); }
-.scene-concrete .part-g { left: 195rpx; top: 51rpx; transform: rotate(28deg); }
-.scene-concrete .part-h { right: 68rpx; top: 127rpx; transform: rotate(8deg); }
+/* 混凝土：连续浇筑、表面扩散波纹与骨料浮动 */
+.scene-concrete .scene-depth { left: 40rpx; right: 48rpx; top: 47rpx; bottom: 0; transform: translate(9rpx, 8rpx); background: #6E685E; }
+.scene-concrete .scene-surface { left: 40rpx; right: 48rpx; top: 39rpx; bottom: 8rpx; border: 5rpx solid #6E685E; background: currentColor; opacity: .15; animation: concreteSettle 4.2s ease-in-out infinite; }
+.scene-concrete .scene-motion { left: 179rpx; top: -7rpx; width: 23rpx; height: 75rpx; border-radius: 0 0 14rpx 14rpx; background: currentColor; transform-origin: center top; animation: concretePour 3.6s ease-in-out infinite; }
+.scene-concrete .scene-tool { left: 149rpx; top: -17rpx; width: 79rpx; height: 36rpx; border: 5rpx solid #6E685E; border-top: 0; border-radius: 0 0 38rpx 38rpx; background: #EFE9DE; transform: rotate(-4deg); animation: hopperTilt 3.6s ease-in-out infinite; }
+.scene-concrete .scene-tool::before { position: absolute; left: 28rpx; bottom: -18rpx; width: 17rpx; height: 20rpx; background: #6E685E; content: ''; }
+.scene-concrete .part-a, .scene-concrete .part-b, .scene-concrete .part-c, .scene-concrete .part-d, .scene-concrete .part-e, .scene-concrete .part-f, .scene-concrete .part-g, .scene-concrete .part-h { width: 15rpx; height: 11rpx; border: 2rpx solid currentColor; border-radius: 55% 40% 60% 45%; background: currentColor; opacity: .45; animation: aggregateFloat 3s ease-in-out infinite; }
+.scene-concrete .part-a { left: 78rpx; top: 63rpx; transform: rotate(-18deg); }
+.scene-concrete .part-b { left: 139rpx; top: 101rpx; transform: rotate(13deg); animation-delay: -.4s; }
+.scene-concrete .part-c { right: 92rpx; top: 67rpx; transform: rotate(21deg); animation-delay: -.8s; }
+.scene-concrete .part-d { right: 141rpx; top: 121rpx; animation-delay: -1.2s; }
+.scene-concrete .part-e { left: 104rpx; top: 129rpx; transform: rotate(18deg); animation-delay: -1.6s; }
+.scene-concrete .part-f { right: 123rpx; top: 96rpx; transform: rotate(-5deg); animation-delay: -2s; }
+.scene-concrete .part-g { left: 191rpx; top: 56rpx; transform: rotate(28deg); animation-delay: -2.4s; }
+.scene-concrete .part-h { right: 72rpx; top: 132rpx; transform: rotate(8deg); animation-delay: -2.8s; }
+.scene-concrete .scene-spark { display: block; left: 145rpx; top: 63rpx; width: 95rpx; height: 22rpx; border: 3rpx solid currentColor; border-radius: 50%; background: transparent; animation: concreteRipple 3.6s ease-out infinite; }
+.scene-concrete .spark-b { animation-delay: -1.8s; }
+.scene-concrete .spark-c { animation-delay: -.9s; }
+
+@keyframes statusPulse { 0%, 100% { opacity: .35; transform: scale(.75); } 50% { opacity: 1; transform: scale(1.25); } }
+@keyframes markerPulse { 0%, 100% { opacity: .2; transform: scale(.65); } 45% { opacity: .95; transform: scale(1.2); } }
+@keyframes tileSet { 0%, 12% { opacity: 0; transform: translate(238rpx,-40rpx) rotate(-8deg) scale(.82); } 28% { opacity: .9; } 55%, 88% { opacity: .34; transform: translate(104rpx,43rpx) skewX(-7deg) scale(1); } 100% { opacity: 0; transform: translate(104rpx,43rpx) skewX(-7deg) scale(1); } }
+@keyframes tileTrowel { 0%, 12%, 72%, 100% { opacity: 0; transform: translateX(-25rpx) rotate(4deg); } 24% { opacity: .8; } 48%, 60% { opacity: .8; transform: translateX(70rpx) rotate(-2deg); } }
+@keyframes tileFocus { 0%, 48%, 100% { opacity: .08; } 62%, 86% { opacity: .27; } }
+@keyframes wallTileSet { 0%, 12% { opacity: 0; transform: translate(245rpx,-14rpx) rotate(7deg) scale(.85); } 28% { opacity: 1; } 54%, 88% { opacity: .25; transform: translate(96rpx,36rpx) rotate(0) scale(1); } 100% { opacity: 0; transform: translate(96rpx,36rpx); } }
+@keyframes levelScan { 0%, 100% { opacity: 0; transform: translateY(-14rpx); } 30%, 70% { opacity: .7; } 80% { opacity: 0; transform: translateY(92rpx); } }
+@keyframes groutSweep { 0%, 35%, 100% { opacity: 0; transform: translateX(-70rpx); } 50% { opacity: .75; } 78% { opacity: .75; transform: translateX(25rpx); } }
+@keyframes boardSlide { 0%, 14% { opacity: 0; transform: translate(240rpx,-20rpx) skewX(-8deg); } 30% { opacity: .95; } 60%, 88% { opacity: .25; transform: translate(108rpx,31rpx) skewX(-8deg); } 100% { opacity: 0; transform: translate(108rpx,31rpx) skewX(-8deg); } }
+@keyframes flooringGuide { 0%, 15%, 100% { opacity: 0; transform: translateX(-20rpx); } 30%, 70% { opacity: .65; } 82% { opacity: 0; transform: translateX(120rpx); } }
+@keyframes boardSheen { 0%, 100% { opacity: 0; transform: translateX(-80rpx) skewX(-8deg); } 35% { opacity: .72; } 75% { opacity: 0; transform: translateX(160rpx) skewX(-8deg); } }
+@keyframes paintCoverage { 0%, 10% { opacity: .08; transform: scaleX(.18); } 55%, 84% { opacity: .18; transform: scaleX(.9); } 100% { opacity: .08; transform: scaleX(.18); } }
+@keyframes paintRoller { 0%, 100% { transform: translate(-112rpx,76rpx); } 18% { transform: translate(-112rpx,0); } 40% { transform: translate(-48rpx,55rpx); } 62% { transform: translate(12rpx,0); } 82% { transform: translate(12rpx,76rpx); } }
+@keyframes paintHandle { 0%, 100% { transform: translate(-112rpx,76rpx) skewX(-18deg); } 18% { transform: translate(-112rpx,0) skewX(-18deg); } 40% { transform: translate(-48rpx,55rpx) skewX(-18deg); } 62% { transform: translate(12rpx,0) skewX(-18deg); } 82% { transform: translate(12rpx,76rpx) skewX(-18deg); } }
+@keyframes wetPaintShine { 0%, 15% { opacity: 0; transform: translateX(0); } 45% { opacity: .65; } 78% { opacity: 0; transform: translateX(172rpx); } 100% { opacity: 0; } }
+@keyframes paintDrop { 0%, 35% { opacity: 0; transform: translateY(-10rpx) rotate(-45deg); } 50% { opacity: .7; } 85%, 100% { opacity: 0; transform: translateY(32rpx) rotate(-45deg); } }
+@keyframes paperUnroll { 0%, 12%, 100% { opacity: 0; transform: scaleY(.05); } 30% { opacity: .85; } 68%, 88% { opacity: .55; transform: scaleY(1); } }
+@keyframes wallpaperSqueegee { 0%, 24%, 100% { opacity: 0; transform: translateY(-25rpx) rotate(-5deg); } 35% { opacity: .85; } 78% { opacity: .85; transform: translateY(88rpx) rotate(4deg); } 90% { opacity: 0; } }
+@keyframes rollBreathe { 0%, 100% { transform: translateY(-2rpx); } 50% { transform: translateY(4rpx); } }
+@keyframes membranePulse { 0%, 100% { opacity: .1; } 50% { opacity: .24; } }
+@keyframes waterDrop { 0%, 12% { opacity: 0; transform: translateY(-28rpx) rotate(-45deg) scale(.7); } 28% { opacity: .9; } 68% { opacity: .9; transform: translateY(58rpx) rotate(-45deg) scale(1); } 72%, 100% { opacity: 0; transform: translateY(58rpx) rotate(-45deg) scale(.6); } }
+@keyframes waterRipple { 0%, 55% { opacity: 0; transform: scale(.3); } 66% { opacity: .7; } 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes waterproofBrush { 0%, 100% { transform: translateX(-18rpx) skewX(-10deg); } 50% { transform: translateX(145rpx) skewX(-10deg); } }
+@keyframes waterproofHandle { 0%, 100% { transform: translateX(-18rpx) rotate(-18deg); } 50% { transform: translateX(145rpx) rotate(-18deg); } }
+@keyframes ceilingPanelLift { 0%, 14% { opacity: 0; transform: translate(98rpx,73rpx) skewX(7deg) scale(.88); } 32% { opacity: .95; } 64%, 88% { opacity: .28; transform: translate(52rpx,-4rpx) skewX(7deg) scale(1); } 100% { opacity: 0; transform: translate(52rpx,-4rpx) skewX(7deg); } }
+@keyframes ceilingScan { 0%, 100% { opacity: 0; transform: translateY(-20rpx); } 25%, 70% { opacity: .65; } 82% { opacity: 0; transform: translateY(85rpx); } }
+@keyframes hangerPulse { 0%, 100% { opacity: .3; transform: scale(.72); } 50% { opacity: 1; transform: scale(1.25); } }
+@keyframes brickSet { 0%, 12% { opacity: 0; transform: translate(245rpx,-28rpx) rotate(-5deg); } 30% { opacity: 1; } 58%, 88% { opacity: .25; transform: translate(0,0) rotate(0); } 100% { opacity: 0; } }
+@keyframes mortarSweep { 0%, 12%, 100% { opacity: 0; transform: translateX(-35rpx) rotate(-3deg); } 26% { opacity: .85; } 55%, 72% { opacity: .85; transform: translateX(120rpx) rotate(2deg); } 86% { opacity: 0; } }
+@keyframes brickFocus { 0%, 45%, 100% { opacity: .06; } 60%, 86% { opacity: .24; } }
+@keyframes dustFloat { 0%, 100% { opacity: 0; transform: translate(0,12rpx) scale(.7); } 45% { opacity: .55; } 75% { opacity: 0; transform: translate(12rpx,-24rpx) scale(1.2); } }
+@keyframes screedBar { 0%, 100% { transform: translateX(-115rpx) rotate(-8deg); } 50% { transform: translateX(56rpx) rotate(5deg); } }
+@keyframes screedHandle { 0%, 100% { transform: translateX(-115rpx) rotate(24deg); } 50% { transform: translateX(56rpx) rotate(15deg); } }
+@keyframes screedLevel { 0%, 100% { opacity: .15; transform: scaleX(.15); } 50% { opacity: .78; transform: scaleX(1); } }
+@keyframes concreteSettle { 0%, 100% { opacity: .12; } 50% { opacity: .2; } }
+@keyframes concretePour { 0%, 10%, 100% { opacity: 0; transform: scaleY(.15); } 24%, 68% { opacity: .72; transform: scaleY(1); } 82% { opacity: 0; transform: scaleY(.35); } }
+@keyframes hopperTilt { 0%, 100% { transform: rotate(-4deg) translateY(-2rpx); } 45% { transform: rotate(4deg) translateY(3rpx); } }
+@keyframes aggregateFloat { 0%, 100% { opacity: .25; } 50% { opacity: .62; } }
+@keyframes concreteRipple { 0%, 20% { opacity: 0; transform: scale(.25); } 35% { opacity: .6; } 80%, 100% { opacity: 0; transform: scale(1.5); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .drawing-status-dot, .scene-depth, .scene-surface, .scene-motion, .scene-tool, .scene-part, .scene-spark { animation: none !important; }
+}
 
 
 .history-banner { display: flex; align-items: center; margin-top: 18rpx; padding: 18rpx 22rpx; border-left: 5rpx solid #A85037; color: #766D60; background: #EEE6D9; font-size: 20rpx; }

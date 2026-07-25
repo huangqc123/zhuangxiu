@@ -1,6 +1,7 @@
 const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
+const { TOOLS } = require('../miniprogram/utils/tools')
 
 const root = path.resolve(__dirname, '..')
 const miniprogram = path.join(root, 'miniprogram')
@@ -79,6 +80,19 @@ assert.ok(profileTemplate.includes('用户协议') && profileTemplate.includes('
 
 const calculatorTemplate = fs.readFileSync(path.join(miniprogram, 'pages/calculator/index.wxml'), 'utf8')
 assert.ok(calculatorTemplate.includes('scene-{{tool.visualType}}'), '计算页缺少材料差异化施工示意图')
+assert.ok(calculatorTemplate.includes('scene-motion') && calculatorTemplate.includes('scene-tool'), '动态施工示意图缺少运动或工具图层')
+assert.ok(calculatorTemplate.includes('scene-spark'), '动态施工示意图缺少细节粒子图层')
+const calculatorStyle = fs.readFileSync(path.join(miniprogram, 'pages/calculator/index.wxss'), 'utf8')
+TOOLS.forEach(tool => {
+  assert.ok(calculatorStyle.includes(`.scene-${tool.visualType}`), `${tool.name}缺少独立动态场景样式`)
+})
+assert.ok((calculatorStyle.match(/animation:/g) || []).length >= TOOLS.length, '施工示意图动画数量不足')
+const declaredKeyframes = new Set([...calculatorStyle.matchAll(/@keyframes\s+([\w-]+)/g)].map(match => match[1]))
+const animationNames = [...calculatorStyle.matchAll(/animation:\s*([\w-]+)/g)]
+  .map(match => match[1])
+  .filter(name => name !== 'none')
+animationNames.forEach(name => assert.ok(declaredKeyframes.has(name), `施工动画 ${name} 缺少关键帧定义`))
+assert.ok(calculatorStyle.includes('@media (prefers-reduced-motion: reduce)'), '施工动画缺少减少动态效果兼容')
 assert.ok(calculatorTemplate.includes('open-type="share"'), '计算结果缺少微信好友分享入口')
 assert.ok(calculatorTemplate.indexOf('open-type="share"') > calculatorTemplate.indexOf('id="result-anchor"'), '分享按钮必须位于结果自动定位区域内')
 
